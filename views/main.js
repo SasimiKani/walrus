@@ -3,10 +3,6 @@ var socket
 var id
 
 const imgs = []
-fetch("img/wal-mae.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
-fetch("img/wal-hidari.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
-fetch("img/wal-migi.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
-fetch("img/wal-ushiro.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
 
 function render(pos) {
     main.innerHTML = ""
@@ -27,7 +23,12 @@ function render(pos) {
         })
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await fetch("img/wal-mae.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+    await fetch("img/wal-hidari.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+    await fetch("img/wal-migi.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+    await fetch("img/wal-ushiro.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+
     socket = io({
         query: {
             pos: JSON.stringify({x: 0, y: 0, ang: 0})
