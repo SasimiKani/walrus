@@ -8,6 +8,7 @@ const imgs = []
 
 function render(pos) {
     Object.entries(pos)
+        .sort((a, b) => a[1].y - b[1].y)
         .forEach(p => {
             const img = document.createElement("img")
             img.id = `wal-${p[0]}`
