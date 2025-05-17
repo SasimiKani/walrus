@@ -2,23 +2,30 @@ const main = document.querySelector("main")
 var socket
 var id
 
+const me = {x: 0, y: 0, ang: 0}
+
 const imgs = []
 
 function render(pos) {
-    main.innerHTML = ""
     Object.entries(pos)
-        .map(p => p[1])
         .forEach(p => {
-            const src = imgs[p.ang]
-            
             const img = document.createElement("img")
+            img.id = p[0]
             img.style.position = "absolute"
-            img.style.top = `${p.y}px`
-            img.style.left = `${p.x}px`
             img.style.width = "100px"
             img.style.height = "100px"
+            if (p[0] === id) {
+                var src = imgs[me.ang]
+                img.style.top = `${me.y}px`
+                img.style.left = `${me.x}px`
+            } else {
+                var src = imgs[p[1].ang]
+                img.style.top = `${p[1].y}px`
+                img.style.left = `${p[1].x}px`
+            }
             img.src = src
-            
+
+            main.querySelector(`#${p[0]}`)?.remove()
             main.appendChild(img)
         })
 }
@@ -36,6 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
     socket.on("connect", () => {
         id = socket.id
+        me.x = me.y = me.ang = 0
     })
 
     socket.on("updatePos", (pos) => {
@@ -43,6 +51,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
 
     addEventListener("keydown", e => {
+        switch (e.key) {
+            case "ArrowLeft":
+                me.x -= 20
+                me.ang = 1
+                break
+            case "ArrowRight":
+                me.x += 20
+                me.ang = 2
+                break
+            case "ArrowUp":
+                me.y -= 20
+                me.ang = 3
+                break
+            case "ArrowDown":
+                me.y += 20
+                me.ang = 0
+                break
+        }
+        const localPos = {}
+        localPos[id] = me
+        render(localPos)
+        
         fetch("/keydown", {
             method: "post",
             headers: {
