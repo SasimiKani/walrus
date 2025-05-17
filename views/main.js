@@ -1,6 +1,7 @@
 const main = document.querySelector("main") 
 var socket
 var id
+var listener = null
 
 const me = {x: 0, y: 0, ang: 0}
 
@@ -51,44 +52,49 @@ document.addEventListener("DOMContentLoaded", async () => {
     socket.on("connect", () => {
         id = socket.id
         me.x = me.y = me.ang = 0
+
+        main.innerHTML = ""
+
+        if (listener) {
+            removeEventListener(listener)
+        }
+        listener = addEventListener("keydown", e => {
+            switch (e.key) {
+                case "ArrowLeft":
+                    me.x -= 20
+                    me.ang = 1
+                    break
+                case "ArrowRight":
+                    me.x += 20
+                    me.ang = 2
+                    break
+                case "ArrowUp":
+                    me.y -= 20
+                    me.ang = 3
+                    break
+                case "ArrowDown":
+                    me.y += 20
+                    me.ang = 0
+                    break
+            }
+            const localPos = {}
+            localPos[id] = me
+            render(localPos)
+            
+            fetch("/keydown", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id,
+                    key: e.key,
+                })
+            })
+        })
     })
 
     socket.on("updatePos", (pos) => {
         render(pos)
-    })
-
-    addEventListener("keydown", e => {
-        switch (e.key) {
-            case "ArrowLeft":
-                me.x -= 20
-                me.ang = 1
-                break
-            case "ArrowRight":
-                me.x += 20
-                me.ang = 2
-                break
-            case "ArrowUp":
-                me.y -= 20
-                me.ang = 3
-                break
-            case "ArrowDown":
-                me.y += 20
-                me.ang = 0
-                break
-        }
-        const localPos = {}
-        localPos[id] = me
-        render(localPos)
-        
-        fetch("/keydown", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id,
-                key: e.key,
-            })
-        })
     })
 })
