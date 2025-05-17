@@ -10,7 +10,7 @@ function render(pos) {
     Object.entries(pos)
         .forEach(p => {
             const img = document.createElement("img")
-            img.id = p[0]
+            img.id = `wal-${p[0]}`
             img.style.position = "absolute"
             img.style.width = "100px"
             img.style.height = "100px"
@@ -25,9 +25,15 @@ function render(pos) {
             }
             img.src = src
 
-            main.querySelector(`#${p[0]}`)?.remove()
+            main.querySelector(`#wal-${p[0]}`)?.remove()
             main.appendChild(img)
         })
+    
+    if (Object.keys(pos).length > 1) {
+        Array.from(main.querySelectorAll("img"))
+            .filter(img => !Object.keys(pos).map(id => `wal-${id}`).includes(img.id))
+            .forEach(img => img.remove())
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
