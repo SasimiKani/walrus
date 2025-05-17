@@ -2,15 +2,18 @@ const main = document.querySelector("main")
 var socket
 var id
 
+const imgs = []
+fetch("img/wal-mae.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+fetch("img/wal-hidari.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+fetch("img/wal-migi.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+fetch("img/wal-ushiro.png").then(res => res.blob()).then(blob => imgs.push(URL.createObjectURL(blob)))
+
 function render(pos) {
     main.innerHTML = ""
     Object.entries(pos)
         .map(p => p[1])
         .forEach(p => {
-            const name = p.ang === 0 ? "mae" :
-                        p.ang === 1 ? "hidari" :
-                        p.ang === 2 ? "migi" :
-                        p.ang === 3 ? "ushiro" : "mae"
+            const src = imgs[p.ang]
             
             const img = document.createElement("img")
             img.style.position = "absolute"
@@ -18,7 +21,7 @@ function render(pos) {
             img.style.left = `${p.x}px`
             img.style.width = "100px"
             img.style.height = "100px"
-            img.src = `img/wal-${name}.png`
+            img.src = src
             
             main.appendChild(img)
         })
