@@ -26,6 +26,32 @@ io.on("connection", (socket) => {
     console.log(pos)
     io.emit("updatePos", pos)
 
+    socket.on("keydown", data => {
+        const {id, key} = data
+
+        switch (key) {
+            case "ArrowLeft":
+                pos[id].x -= 20
+                pos[id].ang = 1
+                break
+            case "ArrowRight":
+                pos[id].x += 20
+                pos[id].ang = 2
+                break
+            case "ArrowUp":
+                pos[id].y -= 20
+                pos[id].ang = 3
+                break
+            case "ArrowDown":
+                pos[id].y += 20
+                pos[id].ang = 0
+                break
+        }
+
+        console.log(pos)
+        io.emit("updatePos", pos)
+    })
+
     socket.on("disconnect", () => {
         console.log(`${id} 切断✂️`)
         
@@ -49,33 +75,6 @@ app.use(
 
 app.get("/", (req, res) => {
     res.send("index.html")
-})
-
-app.post("/keydown", (req, res) => {
-    const {id, key} = req.body
-    console.log(id, key)
-
-    switch (key) {
-        case "ArrowLeft":
-            pos[id].x -= 20
-            pos[id].ang = 1
-            break
-        case "ArrowRight":
-            pos[id].x += 20
-            pos[id].ang = 2
-            break
-        case "ArrowUp":
-            pos[id].y -= 20
-            pos[id].ang = 3
-            break
-        case "ArrowDown":
-            pos[id].y += 20
-            pos[id].ang = 0
-            break
-    }
-
-    io.emit("updatePos", pos)
-    res.send("")
 })
 
 server.listen(PORT, "0.0.0.0", () => {

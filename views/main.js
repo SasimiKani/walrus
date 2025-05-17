@@ -56,9 +56,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         main.innerHTML = ""
 
         if (listener) {
-            removeEventListener(listener)
+            removeEventListener("keydown", listener)
         }
-        listener = addEventListener("keydown", e => {
+
+        listener = e => {
             switch (e.key) {
                 case "ArrowLeft":
                     me.x -= 20
@@ -81,17 +82,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             localPos[id] = me
             render(localPos)
             
-            fetch("/keydown", {
-                method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id,
-                    key: e.key,
-                })
+            socket.emit("keydown", {
+                id,
+                key: e.key,
             })
-        })
+        }
+        addEventListener("keydown", listener)
     })
 
     socket.on("updatePos", (pos) => {
