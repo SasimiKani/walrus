@@ -52,15 +52,15 @@ io.on("connection", (socket) => {
         io.emit("updatePos", pos)
     })
     socket.on("send", data => {
+        console.log(data)
         io.emit("popChat", data)
     })
-
     socket.on("disconnect", () => {
         console.log(`${id} 切断✂️`)
         
         delete(pos[`${id}`])
         console.log(pos)
-        io.emit("updatePos", pos)
+        io.emit("remove", id)
     })
 })
 

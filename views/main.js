@@ -32,12 +32,6 @@ function render(pos) {
             main.querySelector(`#wal-${p[0]}`)?.remove()
             main.appendChild(img)
         })
-    
-    if (Object.keys(pos).length > 1) {
-        Array.from(main.querySelectorAll("img"))
-            .filter(img => !Object.keys(pos).map(id => `wal-${id}`).includes(img.id))
-            .forEach(img => img.remove())
-    }
 }
 function viewChat(data) {
     const div = document.createElement("div")
@@ -123,6 +117,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     socket.on("updatePos", (pos) => {
         render(pos)
+    })
+    socket.on("remove", id => {
+        main.querySelector(`#wal-${id}`).remove()
     })
     socket.on("popChat", (data) => {
         if (data.id !== id) {
