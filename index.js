@@ -51,6 +51,9 @@ io.on("connection", (socket) => {
         console.log(pos)
         io.emit("updatePos", pos)
     })
+    socket.on("send", data => {
+        io.emit("popChat", data)
+    })
 
     socket.on("disconnect", () => {
         console.log(`${id} 切断✂️`)

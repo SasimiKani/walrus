@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>セイウチャット</title>
 	<script src="/socket.io/socket.io.js"></script>
     <style>
     body {
@@ -11,10 +11,77 @@
         max-width: 100vw;
         max-height: 100vh;
     }
+
+    main {
+        user-select: none;
+    }
+
+    #explanation {
+        position: absolute;
+        top: calc(100vh - 50px - 8rem);
+        line-height: 1rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    div#chat-box {
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        position: absolute;
+        top: calc(100vh - 50px);
+        left: 0px;
+        width: 100%;
+        height: 50px;
+        box-shadow: 1px 0px 0px 1px black;
+    }
+    input[name=chat] {
+        margin: 8px;
+        width: calc(100% - 100px);
+        height: 30px;
+        font-size: 1rem;
+    }
+    button[name=send] {
+        cursor: pointer;
+        border: none;
+        background-color: #0000;
+        margin: 8px;
+        width: fit-content;
+        height: 30px;
+    }
+    button[name=send]:hover {
+        background-color: #0802;
+        border-radius: 10%;
+    }
+
+    .message-box {
+        transform: translate(0px, -2rem);
+        border: none;
+        border-radius: 10%;
+        background-color: #0808;
+        color: white;
+        padding: 0.3rem 0.5rem;
+        font-size: 1rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        z-index: 9999;
+    }
     </style>
 </head>
 <body>
     <main></main>
+    <div id="explanation">
+        <p>方向キーで移動できます</p>
+        <p>画面下のチャットで発言できます</p>
+        <p>誰でも見られるので、個人情報などの発言は控えましょう</p>
+    </div>
+    <div id="chat-box">
+        <input type="text" name="chat">
+        <button name="send">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" fill="green" stroke="green">
+                <title>send-variant-outline</title>
+                <path d="M3 20V4L22 12M5 17L16.85 12L5 7V10.5L11 12L5 13.5M5 17V7 13.5Z" />
+            </svg>
+        </button>
+    </div>
     <script src="./main.js"></script>
 </body>
 </html>
