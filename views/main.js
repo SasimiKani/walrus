@@ -99,19 +99,22 @@ document.addEventListener("DOMContentLoaded", async () => {
                 key: e.key,
             })
         })
-        listener.push(() => {
-            const data = {
-                id: id,
-                msg: chat.value,
-                pos: me
-            }
-            viewChat(data)
-            
-            socket.emit("send", data)
+        listener.push(e => {
+            if (e.constructor.name === "PointerEvent" || e.constructor.name === "KeyboardEvent" && e.key === "Enter") {
+                const data = {
+                    id: id,
+                    msg: chat.value,
+                    pos: me
+                }
+                viewChat(data)
+                
+                socket.emit("send", data)
 
-            chat.value = ""
+                chat.value = ""
+            }
         })
         addEventListener("keydown", listener[0])
+        chat.addEventListener("keydown", listener[1])
         send.addEventListener("click", listener[1])
     })
 
